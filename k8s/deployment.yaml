@@ -1,23 +1,6 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: olivetti-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: olivetti
-  template:
-    metadata:
-      labels:
-        app: olivetti
-    spec:
-      containers:
-      - name: olivetti
-        image: yourdockerhubuser/olivetti-flask:latest
-        ports:
+aspec:
+  containers:
+    - name: olivetti-flask
+      image: shubhangi0204/olivetti-flask:latest
+      ports:
         - containerPort: 5000
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
