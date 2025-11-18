@@ -13,7 +13,11 @@ spec:
         app: olivetti
     spec:
       containers:
-        - name: olivetti
-          image: YOUR_DOCKERHUB_USERNAME/olivetti-face:latest
-          ports:
-            - containerPort: 5000
+      - name: olivetti
+        image: yourdockerhubuser/olivetti-flask:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
