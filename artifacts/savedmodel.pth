@@ -1,0 +1,73 @@
+name: CI - train & test (artifact)
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    outputs:
+      model_path: artifacts/savedmodel.pth
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f project/requirements.txt ]; then pip install -r project/requirements.txt; fi
+
+      - name: Train model
+        run: |
+          mkdir -p artifacts
+          python project/train_model.py --output artifacts/savedmodel.pth || python project/train.py --output artifacts/savedmodel.pth || python train_model.py --output artifacts/savedmodel.pth || python train.py --output artifacts/savedmodel.pth
+          ls -la artifacts
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: saved-model
+          path: artifacts/savedmodel.pth
+
+  test:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: saved-model
+          path: artifacts
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f project/requirements.txt ]; then pip install -r project/requirements.txt; fi
+
+      - name: Run tests
+        run: |
+          ls -la artifacts
+          python test.py
