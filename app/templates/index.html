@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head><title>Olivetti Predict</title></head>
+  <body>
+    <h1>Upload a 64x64 face image</h1>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" required>
+      <button type="submit">Predict</button>
+    </form>
+    {% if result %}
+      <h2>{{ result }}</h2>
+    {% endif %}
+  </body>
+</html>
