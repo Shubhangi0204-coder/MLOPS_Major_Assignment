@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.pkl
+artifacts/
+model.pkl
+savedmodel.pth
+.env
+.DS_Store
