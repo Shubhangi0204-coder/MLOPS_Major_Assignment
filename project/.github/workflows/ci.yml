@@ -1,4 +1,4 @@
-name: CI - train and test (single-job)
+name: CI - train and test (single job)
 
 on:
   push:
@@ -9,38 +9,37 @@ jobs:
   train_and_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: false
 
-      - name: Show repo layout
+      - name: Show repo tree
         run: |
-          echo "Repo root:"
-          ls -la
-          echo "project dir:"
-          ls -la project || true
+          echo "Repo root:" && ls -la
+          echo "project dir (if present):" && ls -la project || true
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f project/requirements.txt ]; then pip install -r project/requirements.txt; fi
+          python -c "import sklearn, joblib, numpy, sys; print('sklearn', sklearn.__version__); print('joblib', joblib.__version__); print('numpy', numpy.__version__)"
 
-      - name: Train model
+      - name: Train model (write artifact)
         run: |
-          # ensure artifact folder exists and model saved there
           mkdir -p artifacts
-          # run training script (adjust path if yours is project/train.py)
           python project/train_model.py --output artifacts/savedmodel.pth || python project/train.py --output artifacts/savedmodel.pth || python train_model.py --output artifacts/savedmodel.pth || python train.py --output artifacts/savedmodel.pth
-
-      - name: Run tests
-        run: |
           ls -la artifacts
+
+      - name: Run tests (load same artifact)
+        run: |
+          echo "Artifacts present:" && ls -la artifacts
           python test.py
+
