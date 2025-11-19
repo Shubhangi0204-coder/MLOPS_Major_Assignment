@@ -7,9 +7,9 @@ from PIL import Image
 import numpy as np
 
 app = Flask(__name__)
-MODEL_PATH = os.path.join("model", "savedmodel.pth")
+MODEL_PATH = os.path.join("artifacts", "savedmodel.pth")
 data = joblib.load(MODEL_PATH)
-clf = data["model"]
+clf = data["artifacts"]
 
 # Olivetti faces images are 64x64 grayscale flattened
 def preprocess_image(file_storage):
