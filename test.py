@@ -1,16 +1,29 @@
 
-import joblib,pickle
-from sklearn.metrics import accuracy_score
+# test.py (snippet)
+import sys
+import os
 
-def main():
-    obj = joblib.load("artifacts/savedmodel.pth")
-    clf = obj["model"]
-    X_test = obj["X_test"]
-    y_test = obj["y_test"]
+path = "artifacts/savedmodel.pth"
+if not os.path.exists(path):
+    print("ERROR: file not found:", path)
+    sys.exit(1)
 
-    preds = clf.predict(X_test)
-    acc = accuracy_score(y_test, preds)
-    print(f"Test accuracy: {acc:.4f}")
-
-if __name__ == "__main__":
-    main()
+# try torch first (most likely for .pth)
+try:
+    import torch
+    obj = torch.load(path, map_location="cpu")
+    print("Loaded with torch.load(), type:", type(obj))
+except Exception as e_torch:
+    print("torch.load failed:", e_torch)
+    # try joblib as fallback
+    try:
+        import joblib
+        obj = joblib.load(path)
+        print("Loaded with joblib.load(), type:", type(obj))
+    except Exception as e_joblib:
+        print("joblib.load also failed:", e_joblib)
+        # show a few bytes of file to help debugging
+        with open(path, "rb") as f:
+            head = f.read(128)
+        print("first 128 bytes:", head[:128])
+        raise
