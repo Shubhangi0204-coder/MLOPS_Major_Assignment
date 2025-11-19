@@ -1,2 +1,0 @@
-torch.save(model.state_dict(), "artifacts/savedmodel.pth")
-joblib.dump(model, "artifacts/model.joblib")
