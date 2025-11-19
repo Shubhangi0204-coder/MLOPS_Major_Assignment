@@ -10,7 +10,7 @@ def main():
     X, y = data.data, data.target
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.30, random_state=42, stratify=y
-    )  # 70% train, 30% test
+    )  
 
     clf = DecisionTreeClassifier(random_state=42)
     clf.fit(X_train, y_train)
