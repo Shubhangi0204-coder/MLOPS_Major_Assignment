@@ -1,5 +1,5 @@
 
-import joblib
+import joblib,pickle
 from sklearn.metrics import accuracy_score
 
 def main():

@@ -2,7 +2,7 @@
 from sklearn.datasets import fetch_olivetti_faces
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-import joblib, pickle
+import joblib
 import os
 
 def main():
