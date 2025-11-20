@@ -20,7 +20,7 @@ model = obj.get("model") if isinstance(obj, dict) else obj
 
 HTML = """
 <!doctype html>
-<title>Olivetti predictor</title>
+<title>My Olivetti predictor</title>
 <h1>Upload 64x64 grayscale face</h1>
 <form method=post enctype=multipart/form-data>
   <input type=file name=file>
