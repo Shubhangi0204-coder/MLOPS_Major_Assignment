@@ -11,7 +11,7 @@ app = Flask(__name__)
 MODEL_PATH = Path("artifacts/savedmodel.pth")
 
 if not MODEL_PATH.exists():
-    # Friendly error (shouldn't happen if Dockerfile produced or copied model)
+    
     print(f"Model not found at {MODEL_PATH}. Run train.py to create it.", file=sys.stderr)
     raise SystemExit(1)
 
@@ -34,10 +34,6 @@ HTML = """
 def preprocess(img_bytes):
     img = Image.open(BytesIO(img_bytes)).convert("L").resize((64,64))
     arr = np.array(img).reshape(1, -1)
-    # Olivetti images are in [0,1] by sklearn default; some preprocessing may be needed.
-    # If your model was trained on raw pixels in [0,1], ensure similar scaling here.
-    # If you trained on 0-1 float, divide by 255.0:
-    # arr = arr / 255.0
     return arr
 
 @app.route("/", methods=["GET","POST"])

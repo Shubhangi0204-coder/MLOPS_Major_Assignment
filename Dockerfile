@@ -1,10 +1,10 @@
-# Dockerfile - updated for Debian trixie / python:3.10-slim
+
 FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
-
+git checkout docker_cicd
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
