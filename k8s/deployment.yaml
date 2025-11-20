@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: olivetti-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: olivetti
+  template:
+    metadata:
+      labels:
+        app: olivetti
+    spec:
+      containers:
+        - name: olivetti
+          image: shubhangi0204/olivetti-flask:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
