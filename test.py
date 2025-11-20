@@ -1,21 +1,16 @@
+import joblib
+from sklearn.metrics import accuracy_score
 
-import sys
-import os
+print("Loading saved model...")
+data = joblib.load("artifacts/savedmodel.pth")
+model = data["model"]
+X_test = data["X_test"]
+y_test = data["y_test"]
 
-path = "artifacts/savedmodel.pth"
-if not os.path.exists(path):
-    print("ERROR: file not found:", path)
-    sys.exit(1)
+print("Running predictions...")
+preds = model.predict(X_test)
+
+acc = accuracy_score(y_test, preds)
+print("Test accuracy:", acc)
 
 
-    try:
-        import joblib
-        obj = joblib.load(path)
-        print("Loaded with joblib.load(), type:", type(obj))
-    except Exception as e_joblib:
-        print("joblib.load also failed:", e_joblib)
-        # show a few bytes of file to help debugging
-        with open(path, "rb") as f:
-            head = f.read(128)
-        print("first 128 bytes:", head[:128])
-        raise
